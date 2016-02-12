@@ -42,7 +42,7 @@ alucR_rule.mw <- funtion(lc, suit, rule.mw){ # , filename='', ...
 		rm(suitMWf)
 		rm(focalC)
 		rm(focalW)
-	} else {print(paste ("Warning:", as.character(rule.mw[f,1]),"is not an element of the suitability rasters names:", suitNames, sep="")}
+	} else {print(paste ("rule.mw was not applied:", as.character(rule.mw[f,1]),"is not an element of the suitability rasters names:", suitNames, sep="")}
 	}
 	return(p_raster)
 	}

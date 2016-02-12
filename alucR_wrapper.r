@@ -21,34 +21,11 @@ aluc <- function(lc,
 		while (epoche <= nrow(demand)){
 		
 		print(paste("EPOCHE:", epoche , "Date:", date() ,sep=" "))
+		
 		# variables as input for all functions 
 		#Only at the beginning calculated
-		
 		if (epoche==1){
-			#names of land use classes (those of the suitability stack) to be modelled
-			lu_suit <- as.numeric(gsub("lc","",colnames(p_vector)))   # tolower(colnames(p_vector))
-			
-			# no change classes
-			no.change <- ifelse(length(nochange.lc )> 0 ), as.numeric(gsub("lc","",nochange.lc)), c())
-			
-			#natural land cover classes (as.numeric)
-			natural <- if(length(natural.lc)>0 ,as.numeric(gsub("lc","",natural.lc)), c())
-			
-			# same as length (lu_suit) number of suitability layers to be modeled
-			#lu_suit_l <- ncol(p_vector)
-			
-			# number of pixel for all land use/cover classes within the initial lland use/cover raster (excluding NA)
-			lc_pix <- tabulate(data_vector, nbins=max(data_vector, na.rm=TRUE)) 
-			
-			# total amount of pixels (excl. NAs)
-			lc_n <- sum(lc_pix)
-			
-			# unique classes land use/cover classes
-			lc_unique <- sort(unique(data_vector))
-			
-			# +1 pseudo natural layer for allocation algorithm
-			pseudo.N <- max(lc_unique) + 1
-			lu.N <- c(lu_suit,  pseudo.N) # class numbers  of all classes to be modelled (incl. pseudo natural class)   
+		var.list <- alucR_prep0 (lc=lc, suit=suit, nochange.lc=nochange.lc, natural.lc)
 		}
 		
 		# rule.mw 
@@ -59,7 +36,7 @@ aluc <- function(lc,
 		} 	
 					
 		#raster prep
-		prep <- raster.prep (lc=lc, p_raster, natural.lc ,nochange.lc, spatial, demand, elas, traj, init.years, ncores)
+		prep <- alucR_prep2 (lc=lc, p_raster, natural.lc ,nochange.lc, spatial, demand, elas, traj, init.years, ncores)
 		
 		#demand prep
 		demandE.new <- demand.prep ()
