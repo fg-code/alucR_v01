@@ -112,7 +112,7 @@ allocation.module <- function(suit.N , lc, lu.N ,demandE.new, stop.crit, iter.ma
     adj.p <- ifelse (adj.p < -100, -100, ifelse(adj.p > 100,100, adj.p ))
     # adjust iter values for 
     iter <- iter + adj.p
-    assign("global.iter", iter , envir = .GlobalEnv) 
+    #assign("global.iter", iter , envir = .GlobalEnv) 
     iter <- as.numeric (ifelse(iter < -150, -150, ifelse(iter > 150,150, iter))) # upper and lower bound of iter (should never be reached)
     if (u > 1){
       if (all(sign(iter)==-1) | all(sign(iter)==+1)){ # prevent all iter to have the same sign in the second iteration sign(0) returns 0 
