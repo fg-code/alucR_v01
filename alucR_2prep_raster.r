@@ -4,18 +4,15 @@
 #p_raster | RasterStack of suitabilities (derived from suit earlier) for the specific land use classes to model. Layer names "lc1", "lc2"... with the numbers refering to the land cover classes in the initial land cover map lc
 #nochange.lc | (optional) vector of charachter naming the land cover classes which do not change during the modelling experiment example c("lc5","lc6") when class 5 refers for example to water and 5 and 6 refer to water. Nochange classes should not be included in the suit RasterStack (will be dropped if any)
 #natural.lc | (optional) vector of charachter naming the land cover classes which refer to natural vegetation. for example c("lc1","lc2") when landcover 1 refers to Forest and land cover 2 to secondary vegetation 
-# spatial | (optional) RasterLayer defining Protected Areas (no change allowed within these areas). Locations of NA represent areas outside Protected areas, location != NA represent areas of Protection. If nessesary you can also provide a vector of RasterLayer Object names instead to define different Protected Areas for different sceanario years
+# spatially | (optional) RasterLayer defining Protected Areas (no change allowed within these areas). Locations of NA represent areas outside Protected areas, location != NA represent areas of Protection. If nessesary you can also provide a vector of RasterLayer Object names instead to define different Protected Areas for different sceanario years
 #elas | (optional, but recomendet) matrix of values between 0 and 1 referring to the conversion/trajectory elasticity of the land use/cover classes. Rows: initial land use/cover (1 to n), Columns: following land use/cover (1 to n). Definition 0: no change due to elasticities, 0.5: incresed likelyness for the class or conversion, 1: very high likelyness for the class or conversion.
 #traj | (optional, but recomendet) matrix describing the temporal trajectories of land use/cover. Rows: initial land use/cover (1 to n), Columns: following land use/cover (1 to n). Values define the years of transition, e.g. 0: no transition allowed, 1: transition allowed after first iteration, 10: transition allowed after 10 iterations. must be specified for all land_cover classes.
-
 # init.years | (optional) RasterLayer, vales integer, referring to the number of years since the last lc change. 
 
+#OUT: adapted suitabilities
 
 
-#alucR_prep2 <- function (lc, p_raster, spatial, init.years, var.list, epoche =epoche ,  elas, traj
-
-
-alucR_prep2  <- function(lc, p_raster, spatial, init.years, var.list, epoche =epoche ,  elas, traj, filename='', ...) {
+alucR_prep2  <- function(lc, p_raster, spatially, init.years, var.list, epoche=epoche ,  elas, traj, filename='', ...) {
 #prepare additional function input
   # extract variables from var.list
   lc_suit <-   var.list [[4]][["lc_suit"]]
@@ -32,52 +29,18 @@ alucR_prep2  <- function(lc, p_raster, spatial, init.years, var.list, epoche =ep
     p_raster <- dropLayer (p_raster, drop.layer)
   }
  
-# read protected areas raster in case it it is defined differently for each epoche
-  if (length (spatial)> 0){
-    if (class(spatial)=="character"){
-      spatial <- get(spatial[epoche])# in case different stacks for each episode are specified - possibly useful if the protected area network will be expanded during the modelling experiment
-    } # else it is defined as raster in the input to the function 
-  }
- 
-# land use history only for the firts epoche if its not specified as a RasterLayer (later epoches build on the updated land use history)
-  if (epoche == 1){
-    if (class(init.years)!="RasterLayer" & class(init.years)!="numeric"){
-      print ("init.years need to be either a RasterLayer or a single 'numeric value'")
-      init.years <-  setValues (lc, 0)
-    } else if (class(init.years) == "numeric" & length (init.years) > 1) { 
-      print ("only first value of init.year is used")
-    } else if (class( init.years) == "numeric"){
-      init.years <-  setValues (lc, init.years[1])
-    } 
-  }
-  
-# check if all RasterLayer belong to the same projection, have same extent and origine
-  if (extent(lc) != extent (p_raster)){print ("Raster extents do not match (lc!=suit)")}
-  if (projection(lc) != projection (p_raster)){print ("Raster projections do not match (lc!=suit)")}
-  if (any(origin(lc) != origin(p_raster))){print ("Raster origine's do not match (lc!=suit)")}
-  
-  if (length (spatial)> 0){ 
-    if (extent(lc) != extent (spatial)){print ("Raster extents do not match (lc!=spatial)")}
-    if (projection(lc) != projection (spatial)){print ("Raster projections do not match (lc!=spatial)")}
-    if (any(origin(lc) != origin (spatial))){print ("Raster origine's do not match (lc!=spatial)")}
-  }
-  
-  if (extent(lc) != extent (init.years)){print ("Raster extents do not match (lc!=init.years)")}
-  if (projection(lc) != projection(init.years)){print ("Raster projections do not match (lc!=init.years)")}
-  if (any(origin(lc) != origin (init.years))){print ("Raster origine's do not match (lc!=init.years)")} 
 
-  
 # preparing out raster  
 # if natural suitability required 
   if (length (natural) > 0){ 
     out.n <- setValues(lc ,0.5) ; names(out.n)<- "lcN"
     out_raster <- addLayer (p_raster, out.n) 
     out <- brick(out_raster, values=FALSE)
-	rm(p_raster)
+	#rm(p_raster)
 	} else {
 	assign ("out_raster", p_raster)
     out <- brick(out_raster, values=FALSE)
-	rm(p_raster)
+	#rm(p_raster)
   }
   
 
@@ -107,8 +70,8 @@ for (i in 1:bs$n) {
 
 	v.lc <- getValues(lc, row=bs$row[i], nrows=bs$nrows[i] )
     v.suit <- getValues(p_raster , row=bs$row[i], nrows=bs$nrows[i] )
-    if (length (spatial) > 0) { 
-	v.spatial <- getValues(spatial, row=bs$row[i], nrows=bs$nrows[i] )
+    if (length (spatially) > 0) { 
+	v.spatially <- getValues(spatially, row=bs$row[i], nrows=bs$nrows[i] )
 	}
     v.init.years <- getValues(init.years, row=bs$row[i], nrows=bs$nrows[i] )
     if(length (natural) > 0 ){
@@ -125,9 +88,9 @@ for (i in 1:bs$n) {
       }
     }
 
-    #spatial restrictions masked from suitability
-    if (length (spatial)> 0){ # make sure to 
-      sp.rest_index <- !is.na(v.spatial) # set those to NA which have a value in the restriction layer
+    #spatially restrictions masked from suitability
+    if (length (spatially)> 0){ # make sure to 
+      sp.rest_index <- !is.na(v.spatially) # set those to NA which have a value in the restriction layer
       v.suit[sp.rest_index,] <- NA
       if(length (natural) > 0 ){
         v.natural [sp.rest_index] <- NA
@@ -240,9 +203,9 @@ out <- writeStop(out)
     v.lc <- getValues(lc)
 	#v.suit <- getValues(p_raster , row=bs$row[i], nrows=bs$nrows[i] )
     v.suit <- getValues(p_raster)
-	if (length (spatial) > 0) { 
-	#v.spatial <- getValues(spatial, row=bs$row[i], nrows=bs$nrows[i] )
-	v.spatial <- getValues(spatial)
+	if (length (spatially) > 0) { 
+	#v.spatially <- getValues(spatially, row=bs$row[i], nrows=bs$nrows[i] )
+	v.spatially <- getValues(spatially)
 	}
     #v.init.years <- getValues(init.years, row=bs$row[i], nrows=bs$nrows[i] )
     v.init.years <- getValues(init.years)
@@ -261,9 +224,9 @@ out <- writeStop(out)
       }
     }
 
-    #spatial restrictions masked from suitability
-    if (length (spatial)> 0){ # make sure to 
-      sp.rest_index <- !is.na(v.spatial) # set those to NA which have a value in the restriction layer
+    #spatially restrictions masked from suitability
+    if (length (spatially)> 0){ # make sure to 
+      sp.rest_index <- !is.na(v.spatially) # set those to NA which have a value in the restriction layer
       if (length(sp.rest_index)> 0){
 	  v.suit[sp.rest_index,] <- NA
       if(length (natural) > 0 ){

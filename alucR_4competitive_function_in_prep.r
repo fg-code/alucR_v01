@@ -18,15 +18,15 @@ install.packages("snow")
 library(snow)
 
 
-alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter=100, stop.crit=c(), print.log==FALSE, print.plot==FALSE ){
-  lc_suit <-   var.list [[4]][["lc_suit"]]
-  lc_slookup <- var.list [[4]] [["lc_slookup"]]
-  nochange <- var.list [[5]][["nochange"]]
-  lc_unique <- var.list [[3]][["lc_unique"]]
-  lc_lookup <- var.list [[3]][["lc_lookup"]]
-  natural <- var.list [[8]][["natural"]]
-  naturallookup <-  var.list [[8]][["naturallookup"]]
-  lc.N <- var.list [[9]][[lc.N]]
+alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter=100, stop.crit=c(), ncores=ncores ,print.log==FALSE, print.plot==FALSE ){
+  #lc_suit <-   var.list [[4]][["lc_suit"]]
+  #lc_slookup <- var.list [[4]] [["lc_slookup"]]
+  #nochange <- var.list [[5]][["nochange"]]
+  #lc_unique <- var.list [[3]][["lc_unique"]]
+  #lc_lookup <- var.list [[3]][["lc_lookup"]]
+  #natural <- var.list [[8]][["natural"]]
+  #naturallookup <-  var.list [[8]][["naturallookup"]]
+  lc.N <- var.list [[10]][[lc.N]]
  
 min.demand <- which.min(demandE) 
  
@@ -40,7 +40,7 @@ iter <- rep(0, times=length(lc.N))
   
 #start allocation
 u=1
-beginCluster(n=8)
+beginCluster(n=ncores)
 repeat {
 ##### 
 if (u==1){
@@ -50,7 +50,7 @@ if (u==1){
 }
 # temporary allocation using clusterR and which.max 
 t_aloc_tmp <- clusterR(p_suit.N, which.max) # all NA which is not "suit" or "natural" - returns number of layer with max value. 
-t_aloc <- clusterR(t_aloc_tmp , reclassify, args=list(rcl =  matrix (c(1:nlayers(p_suit.N), lc.N), ncol=2))) # only the final map...
+t_aloc <- clusterR(t_aloc_tmp , reclassify, args=list(rcl =  matrix (c(1:nlayers(p_suit.N), lc.N), ncol=2))) # possibly change to only the final map...
 
 #assess number of pixels per suit class resulting from the temporary allocation
 f_class <- as.data.frame(freq(t_aloc, useNA="no")) 
