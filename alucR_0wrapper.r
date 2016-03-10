@@ -31,14 +31,14 @@ aluc <- function(lc,
 	print(paste("EPOCHE:", epoche , "Date:", date() ,sep=" "))
 	
 	#read data if provided as list of RasteStacks (possible for suit) or character string (possible for spatial) 
-	if (class(suit)==list){
+	if (class(suit)=="list"){
 		p_raster <- suit[[epoche]]
 	} else { 
 		assign ("p_raster", suit) 
 	}
 	
 	if (length(spatial)>0){ # only if spatial restrictions are defined
-	if (class(spatial)==character){
+	if (class(spatial)=="character"){
 		spatially <- get(spatial[epoche])
 	}else{
 	if (epoche==1){

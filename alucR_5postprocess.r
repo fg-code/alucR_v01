@@ -6,7 +6,7 @@
 # alloc | raster returned from allocation routine 
 
 
-alucR_postprocess <- function (alloc == allocation [[1]],lc , spatial, var.list, traj, init.years, filename='', ...){
+alucR_postprocess <- function (alloc = allocation [[1]],lc , spatial, var.list, traj, init.years, filename='', ...){
 
 	#lc_suit <-   var.list [[4]][["lc_suit"]]
 	#lc_slookup <- var.list [[4]] [["lc_slookup"]]
@@ -14,12 +14,13 @@ alucR_postprocess <- function (alloc == allocation [[1]],lc , spatial, var.list,
 	#lc_unique <- var.list [[3]][["lc_unique"]]
 	#lc_lookup <- var.list [[3]][["lc_lookup"]]
 	natural <- var.list [[8]][["natural"]]
-	#naturallookup <-  var.list [[8]][["naturallookup"]]
-	lc.N <- var.list [[9]][[lc.N]]
+	naturallookup <-  var.list [[8]][["naturallookup"]]
+	pseudo.N <- var.list [[9]][["pseudo.N"]]
+	lc.N <- var.list [[10]][["lc.N"]]
 
 	# trajectory matrix 
 	if (length(traj[traj==0 | is.na(traj)] )>0){
-	for not allowed changes (100 years more than modelling years)
+	#for not allowed changes (100 years more than modelling years)
 	traj[traj==0 | is.na (traj)] <- nrow(demand)+ 100 
 	}
 						
@@ -78,7 +79,7 @@ alucR_postprocess <- function (alloc == allocation [[1]],lc , spatial, var.list,
 			for (j in 1:length(pseudo.index)){
             #can before.n be translated to natural 
 				for (a in length(natural):2){
-					if (traj[naturallookup[a], naturallookup[a-1]] < v.init.years[pseudo.index[j]] | v.init.years[pseudo.index[j]] == naturallookup[a-1]) {
+					if (traj[naturallookup[a], naturallookup[a-1]] < v.init.years[pseudo.index[j]] | v.lc[pseudo.index[j]] == natural[a-1]) {
 						v.alloc[pseudo.index[j]] <- natural[a-1]
 					} else{
 						v.alloc[pseudo.index[j]] <- natural[a]
@@ -89,7 +90,7 @@ alucR_postprocess <- function (alloc == allocation [[1]],lc , spatial, var.list,
 	if (length (natural)== 1) {
 		v.alloc[pseudo.index] <- natural
 	}
-	if (sum(is.element (tprop_vector, pseudo.N))!=0) {
+	if (sum(is.element (v.alloc, pseudo.N))!=0) {
 		print( "Warning: error in natural vegetation module")
 		}
     }}
