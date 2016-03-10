@@ -111,7 +111,7 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
     
     #stop criteria meet?
     # are the min defined percent of change pixels allocated 
-    if (max(abs(pix_d[1:length(demandC)]/demandC)*100) < stop.crit[1]) {
+    if (max(abs(pix_d[1:length(demandC)]/demandC)*100) < stop.crit[1] & max(abs(pix_d[min.demand])) < stop.crit[2]) {
       if (print.log==TRUE){print("Stop criterium: percent of change")}
       beginCluster(n=ncores)
       aloc <- clusterR(t_aloc , reclassify, args=list(rcl =  matrix (c(1:nlayers(p_suit), lc.N), ncol=2)))

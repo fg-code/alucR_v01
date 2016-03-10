@@ -1,7 +1,7 @@
 
 
 #lc | initial land cover categories. 
-#p_raster | RasterStack of suitabilities (derived from suit earlier) for the specific land use classes to model. Layer names "lc1", "lc2"... with the numbers refering to the land cover classes in the initial land cover map lc
+#suit | RasterStack of suitabilities (derived from suit earlier) for the specific land use classes to model. Layer names "lc1", "lc2"... with the numbers refering to the land cover classes in the initial land cover map lc
 #nochange.lc | (optional) vector of charachter naming the land cover classes which do not change during the modelling experiment example c("lc5","lc6") when class 5 refers for example to water and 5 and 6 refer to water. Nochange classes should not be included in the suit RasterStack (will be dropped if any)
 #natural.lc | (optional) vector of charachter naming the land cover classes which refer to natural vegetation. for example c("lc1","lc2") when landcover 1 refers to Forest and land cover 2 to secondary vegetation 
 # spatial | (optional) RasterLayer defining Protected Areas (no change allowed within these areas). Locations of NA represent areas outside Protected areas, location != NA represent areas of Protection. If nessesary you can also provide a vector of RasterLayer Object names instead to define different Protected Areas for different sceanario years
@@ -12,7 +12,7 @@
 #OUT: adapted suitabilities
 
 
-alucR_prep2  <- function(lc, p_raster, spatial, init.years, var.list, epoche=epoche ,  elas, traj, filename='', ...) {
+alucR_prep2  <- function(lc, suit, spatial, init.years, var.list, epoche=epoche ,  elas, traj, filename='', ...) {
 #prepare additional function input
   # extract variables from var.list
   lc_suit <-   var.list [[4]][["lc_suit"]]
@@ -23,10 +23,10 @@ alucR_prep2  <- function(lc, p_raster, spatial, init.years, var.list, epoche=epo
   natural <- var.list [[8]][["natural"]]
   naturallookup <-  var.list [[8]][["naturallookup"]]
 
-# check nochange.lc and p_raster - nochange.lc classes cannot be included in p_raster
+# check nochange.lc and suit - nochange.lc classes cannot be included in suit
   if (any(is.element (lc_suit,nochange))){
     drop.layer <- which(lc_suit == lc_suit[is.element (lc_suit,nochange)]) #which layer to drop cause defined as no change
-    p_raster <- dropLayer (p_raster, drop.layer)
+    suit <- dropLayer (suit, drop.layer)
   }
  
 
@@ -34,13 +34,13 @@ alucR_prep2  <- function(lc, p_raster, spatial, init.years, var.list, epoche=epo
 # if natural suitability required 
   if (length (natural) > 0){ 
     out.n <- setValues(lc ,0.5) ; names(out.n)<- "lcN"
-    out_raster <- addLayer (p_raster, out.n) 
+    out_raster <- addLayer (suit, out.n) 
     out <- brick(out_raster, values=FALSE)
-	#rm(p_raster)
+	#rm(suit)
 	} else {
-	assign ("out_raster", p_raster)
+	assign ("out_raster", suit)
     out <- brick(out_raster, values=FALSE)
-	#rm(p_raster)
+	#rm(suit)
   }
   
 
@@ -69,7 +69,7 @@ if (todisk) {
 for (i in 1:bs$n) {
 
 	v.lc <- getValues(lc, row=bs$row[i], nrows=bs$nrows[i] )
-    v.suit <- getValues(p_raster , row=bs$row[i], nrows=bs$nrows[i] )
+    v.suit <- getValues(suit , row=bs$row[i], nrows=bs$nrows[i] )
 	v.suit[is.na(v.lc)] <- NA
     if (length (spatial) > 0) { 
 	v.spatial <- getValues(spatial, row=bs$row[i], nrows=bs$nrows[i] )
@@ -202,8 +202,8 @@ out <- writeStop(out)
 #for (i in 1:bs$n) {
 	#v.lc <- getValues(lc, row=bs$row[i], nrows=bs$nrows[i] )
     v.lc <- getValues(lc)
-	#v.suit <- getValues(p_raster , row=bs$row[i], nrows=bs$nrows[i] )
-    v.suit <- getValues(p_raster)
+	#v.suit <- getValues(suit , row=bs$row[i], nrows=bs$nrows[i] )
+    v.suit <- getValues(suit)
 	v.suit[is.na(v.lc)] <- NA
 	if (length (spatial) > 0) { 
 	#v.spatial <- getValues(spatial, row=bs$row[i], nrows=bs$nrows[i] )
