@@ -1,4 +1,4 @@
-
+# load data
 library(rgdal)
 library(raster)
 rasterOptions (tmpdir = "q:/carbiocial/florian/data/no_backup/tmp1") 
