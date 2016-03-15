@@ -32,33 +32,29 @@ alucR_prep1 <- function (lc, suit, nochange.lc, natural.lc ){
     nochange <- as.numeric(gsub("lc","",tolower(nochange.lc)))
     var.list [[5]] <- data.frame (nochange= nochange)
     
-    nochangeMask <- match (lc, nochange) # index of nochange.lc , else NA # do i need this??
-    var.list [[6]] <- nochangeMask
-    
     nochangeN <- sum (freqTable[match (nochange, freqTable[,"value"]), "count"]) 
-    var.list [[7]] <- data.frame (nochangeN= nochangeN)
+    var.list [[6]] <- data.frame (nochangeN= nochangeN)
   } else {
     var.list [[5]] <- data.frame (nochange= c())
-    var.list [[6]] <- data.frame (nochangeIND= c())
-    var.list [[7]] <- data.frame (nochangeN= c())
+    var.list [[6]] <- data.frame (nochangeN= c())
   }
   
   #natural land cover classes (as.numeric)
   if (length (natural.lc)> 0) {
     natural <- as.numeric(gsub("lc","",tolower(natural.lc)))
     naturallookup <- var.list [[3]][["lc_lookup"]][is.element(lc_unique, natural)]
-    var.list [[8]] <- data.frame (natural= natural, naturallookup=naturallookup)
+    var.list [[7]] <- data.frame (natural= natural, naturallookup=naturallookup)
     
     # +1 pseudo natural layer for allocation algorithm
     pseudo.N= max(var.list[[3]][["lc_unique"]])+1
-    var.list [[9]] <- data.frame (pseudo.N= pseudo.N )
+    var.list [[8]] <- data.frame (pseudo.N= pseudo.N )
     
     # combine lc_suit and pseudo natural class
-    var.list [[10]] <- data.frame (lc.N= c(var.list [[4]][["lc_suit"]], var.list [[9]][["pseudo.N"]]))# class numbers  of all classes to be modelled (incl. pseudo natural class)   
+    var.list [[9]] <- data.frame (lc.N= c(var.list [[4]][["lc_suit"]], var.list [[8]][["pseudo.N"]]))# class numbers  of all classes to be modelled (incl. pseudo natural class)   
   } else {
-    var.list [[8]] <- data.frame (natural= c())
-    var.list [[9]] <- data.frame (pseudo.N= c())
-    var.list [[10]] <- data.frame (lc.N= c(var.list [[4]][["lc_suit"]])) # in case no natural lc is defined 
+    var.list [[7]] <- data.frame (natural= c())
+    var.list [[8]] <- data.frame (pseudo.N= c())
+    var.list [[9]] <- data.frame (lc.N= c(var.list [[4]][["lc_suit"]])) # in case no natural lc is defined 
   }
-return (var.list)
+  return (var.list)
 }

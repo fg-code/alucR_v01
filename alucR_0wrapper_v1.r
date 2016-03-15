@@ -1,4 +1,4 @@
-# load data
+
 library(rgdal)
 library(raster)
 rasterOptions (tmpdir = "q:/carbiocial/florian/data/no_backup/tmp1") 
@@ -28,7 +28,7 @@ spatial <- merge(spatial.pi,spatial.us, spatial.rp)
 demand<- read.csv("Q:/CarBioCial/Florian/Data/StudyCouple/demandtc/illegal.csv", row.names=2,header=T)[,-1] # uses the same demand as the illegal
 demand <- demand [-1,] # exclude 2010
 names(demand) <- c("lc4","lc3")
-demand <- demand[c(1,2),c(2,1)] # 
+demand <- demand[,c(2,1)] # 
 
 elas <- matrix(data=c(0.3,0 ,0  ,0  ,0,0,0.3,0,
                       0 ,0.1,0  ,0  ,0,0,0.1,0,
@@ -57,7 +57,7 @@ natural.lc <- c("lc1","lc2")
 init.years <- raster("variables/landUseHist/luhist.tif")
 
 # max# cores to use 
-ncores=4
+ncores=8
 max.iter=100
 stop.crit =c(0.1,10)
 
@@ -108,22 +108,21 @@ sceanrioL <- alucR_postprocess(alloc = sceanrioaloc [[1]],lc , spatial, var.list
 
 #extra results from submodules and save them 
 if (epoche==1){
-  alucLog <- sceanrioaloc [[2]]
+  alucLog <- data.frame(epoche=epoche, sceanrioaloc [[2]])
+  
 } else{
-  alucLog <- rbind(alucLog, sceanrioaloc  [[2]])
+  alucLog <- rbind(alucLog,  data.frame(epoche=epoche, sceanrioaloc [[2]]))
 }
 lc <- subset(sceanrioL, subset=1)
 assign(paste("scenario", epoche, sep=""), lc)
 print("epoche done")
 #initialize new epoche
 epoche <- epoche+1
-if (print.plot==TRUE){
+#if (print.plot==TRUE){
   plot(lc)
-}
+#}
 rm(suit.prep)
 rm(demand.prep)
 rm(sceanrioaloc)
 rm(sceanrioL)
 } # end of epoche loop 
-
-
