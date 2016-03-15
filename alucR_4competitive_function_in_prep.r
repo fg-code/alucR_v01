@@ -1,5 +1,5 @@
-
-
+# Date: 15.03.2016
+# florian.gollnow@geo.hu-berlin.de
 
 
 # suit | preprocessed suitabilities 

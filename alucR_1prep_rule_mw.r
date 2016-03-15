@@ -8,25 +8,15 @@
 # lc | raster layer, integer values
 # suit | raster stack,
 # rule.mw | moving window rule example: data.frame(name="lc7",radius=500)
-#  ... | additional raster functions
 
 
-
-
-alucR_rule.mw <- funtion(lc, suit, rule.mw){ # , filename='', ... 
-		
-		p_raster <- alucR_prep1 (suit)
-		
+alucR_rule.mw <- function(lc, suit, rule.mw) {
 		for (f in 1:nrow(rule.mw)){ #moving window rule.
-			suitNames <- names(p_raster)
-			if (is.element (as.character(rule.mw[f,1]), suitNames)){
-			if (epoche==1){
-			mat       <- focalWeight(lc, rule.mw[f,2], "circle") # lc class and radius of moving window
-			focalC    <- lc  
-		}else { 
-			mat       <- focalWeight(new.data, rule.mw[f,2], "circle") # lc class and radius of moving window
-			focalC    <- new.data
-		}
+		
+		suitNames <- names(p_raster)
+		if (is.element (as.character(rule.mw[f,1]), suitNames)){
+		mat       <- focalWeight(lc, rule.mw[f,2], "circle") # lc class and radius of moving window
+		focalC    <- lc  
 		rclM      <- cbind(sort(unique(focalC)), 0)
 		rclM[which(rclM[,1]==as.numeric(gsub("lc","",rule.mw[f,1]))),2] <- 1 # binary classification for the class of interest
 		focalC    <- reclassify(focalC, rcl=rclM)
@@ -42,10 +32,12 @@ alucR_rule.mw <- funtion(lc, suit, rule.mw){ # , filename='', ...
 		rm(suitMWf)
 		rm(focalC)
 		rm(focalW)
-	} else {print(paste ("rule.mw was not applied:", as.character(rule.mw[f,1]),"is not an element of the suitability rasters names:", suitNames, sep="")}
-	}
+			} else {
+	  print(paste ("rule.mw was not applied:", as.character(rule.mw[f,1]),"is not an element of the suitability rasters names:", suitNames, sep=""))
+			}
+		}
 	return(p_raster)
-	}
+}
 
 
 

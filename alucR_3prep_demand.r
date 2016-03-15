@@ -1,6 +1,13 @@
+#Date: 15.3.2026
+# florian.gollnow@geo.hu-berlin.de
+
+#prepares the demand file. adds a columne for the amount of natral vegetation to be modelled, substracts land use in protected areas form the demand, etc.
+
 # demand | data.frame with demand for each land use class, columnes refer to lu, i.e. names ("lc7", "lc4", "lc3"), while sorting sould be similar to land use suitabilities rastestack
 # lc | raster layer, integer values
 # spatial | raster layer defining protected areas 
+# var.list
+# epoche
 
 # OUT: list, combining the 
 #[[1]] adjusted demand, including natural land cover and reduced for the spatial restrictions 

@@ -1,5 +1,6 @@
-# code. florian.gollnow@geo.hu-berlin.de
-# alucR preperation of descriptive variables from input - only calculated once at the beginning of the allocation procedure 
+#Date 15.3.2015
+#florian.gollnow@geo.hu-berlin.de
+#alucR preperation of descriptive variables from input - only calculated once at the beginning of the allocation procedure 
 
 #lc | initial land cover categories. 
 #suit | RasterStack of suitabilities for the specific land use classes to model. Layer names "lc1", "lc2"... with the numbers refering to the land cover classes in the initial land cover map lc

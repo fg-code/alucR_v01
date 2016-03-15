@@ -1,4 +1,8 @@
+#date: 16.3.2016
 
+#florian.gollnow@geo.hu-belin.de
+
+#prepares the suitability layer according to nochange, natural, elas, traj for the allocation procedure 
 
 #lc | initial land cover categories. 
 #suit | RasterStack of suitabilities (derived from suit earlier) for the specific land use classes to model. Layer names "lc1", "lc2"... with the numbers refering to the land cover classes in the initial land cover map lc

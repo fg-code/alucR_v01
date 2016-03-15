@@ -2,15 +2,15 @@
 
 alucR - Project is a first step to implement a Land Use Change Model in R (http://www.r-project.org). We have been following the basic framework provided by Verburg et al. (2002). Land use is spatially allocated following the suitability of a certain cell for the specific land use. The suitability might be assessed using statistical methods (for example logistic regression), machine learning algorithms (for example boosted regression trees) or other modelling techniques (for example Multi Criteria Analysis). The amount of future land use demands for the scenario assessment has to be estimated for the total study area and provided as numbers of pixels. Natural land cover and possible succession stages can be modelled based on the temporal trajectories of succession stages defined before in the trajectories matrix. The code uses basic R-language and packages. This makes it possible to easily adapt the code to the users specific needs.
 
-#Differece to alucR
+#Difference to alucR
 The version alucR_v01 takes a modular approach following a set of function with specified in and output. This approach makes it easier to add new submodules as for example nessesary when your suitability layers depend on the last landcover distribution from your sceanrios (i.e. if spatial lags are important).
 
 #Submodules stucture:
-* initializing
-* preprocessing
-* allocation of change
-* postprocessin
-* saving results
+* initializing ('alucR_0wrapper.r')
+* preprocessing ('alucR_1checkInput.r'; 'alucR_1prep_rule_mw.r'; 'alucR_1prep_varlist.r';'alucR_2prep_raster.r'; 'alucR_3prep_demand.r')
+* allocation of change ('alucR_4competitive_function_in_prep.r')
+* postprocessin ('alucR_5postprocess.r')
+* saving results ('alucR_0wrapper.r')
 
 Thes submodules are called from the wrapper function 'alucR_0wrapper.r' script. Wile alle the required functions need to be sources seperately
 
@@ -19,7 +19,7 @@ Thes submodules are called from the wrapper function 'alucR_0wrapper.r' script. 
 
 aluc(lc, suit, natural.lc=NULL, nochange.lc=NULL, spatial=NULL, demand, elas=matrix(data=0, ncol=max(lc_unique), nrow=max(lc_unique)), traj=matrix(data=1, ncol=max(lc_unique), nrow=max(lc_unique)), init.years= 5, method = "competitive", rule.mw = NULL, stop.crit=c(0.10 , 10), iter.max=100, ncores=(detectCores()-1), print.log=TRUE, print.plot=FALSE, write.raster=FALSE)
 
-##the function returns a List object:
+##the function returns a 'List' object:
 [[1]] 'RasterStack' containing the categorical scenarios of land use allocation for the requested years (as defiend in the 'demand')
 [[2]] 'data.frame' of log information
 

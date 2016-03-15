@@ -1,3 +1,9 @@
+# Date 15.03.2016
+#florian.gollnow@geo.hu-berlin.de
+
+# reassambles the protected areas, no.change areas  etc. to the allocation outpt to have the complete scenario map.
+
+
 # outputs:
 # scenario
 # init.years (new)
