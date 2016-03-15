@@ -12,7 +12,7 @@ The version alucR_v01 takes a modular approach following a set of function with 
 * postprocessin ('alucR_5postprocess.r')
 * saving results ('alucR_0wrapper.r')
 
-Thes submodules are called from the wrapper function 'alucR_0wrapper.r' script. Wile alle the required functions need to be sources seperately
+Thes submodules are called from the wrapper function _'alucR_0wrapper.r'_ script. While all the required functions (above mentioned) need to be sourced (defined) seperately
 
 
 ##Function:
