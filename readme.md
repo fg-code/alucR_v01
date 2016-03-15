@@ -15,11 +15,11 @@ The version alucR_v01 takes a modular approach following a set of function with 
 Thes submodules are called from the wrapper function 'alucR_0wrapper.r' script. Wile alle the required functions need to be sources seperately
 
 
-function:
+##Function:
 
 aluc(lc, suit, natural.lc=NULL, nochange.lc=NULL, spatial=NULL, demand, elas=matrix(data=0, ncol=max(lc_unique), nrow=max(lc_unique)), traj=matrix(data=1, ncol=max(lc_unique), nrow=max(lc_unique)), init.years= 5, method = "competitive", rule.mw = NULL, stop.crit=c(0.10 , 10), iter.max=100, ncores=(detectCores()-1), print.log=TRUE, print.plot=FALSE, write.raster=FALSE)
 
-the function returns a List object:
+##the function returns a List object:
 [[1]] 'RasterStack' containing the categorical scenarios of land use allocation for the requested years (as defiend in the 'demand')
 [[2]] 'data.frame' of log information
 
