@@ -17,27 +17,10 @@ Thes submodules are called from the wrapper function 'alucR_0wrapper.r' script. 
 
 description:
 
-aluc(lc, 						
-     suit, 						
-     natural.lc=NULL,				
-     nochange.lc=NULL,			
-     spatial=NULL, 
-     demand=NULL, 
-     elas=matrix(data=0, ncol=max(lc_unique), nrow=max(lc_unique)), 
-     traj=matrix(data=1, ncol=max(lc_unique), nrow=max(lc_unique)), 
-     init.years= 5,  
-     method = "competitive",
-		 rule.mw = NULL,
-     stop.crit=c(0.10 , 10),
-     iter.max=100, 
-     ncores=(detectCores()-1), 
-     print.log=TRUE, 
-     print.plot=FALSE, 
-     write.raster=FALSE)
+aluc(lc, suit, natural.lc=NULL, nochange.lc=NULL, spatial=NULL, demand, elas=matrix(data=0, ncol=max(lc_unique), nrow=max(lc_unique)), traj=matrix(data=1, ncol=max(lc_unique), nrow=max(lc_unique)), init.years= 5, method = "competitive", rule.mw = NULL, stop.crit=c(0.10 , 10), iter.max=100, ncores=(detectCores()-1), print.log=TRUE, print.plot=FALSE, write.raster=FALSE)
 
 argument | description 
 ----- | ----- 
-
 lc | initial land use/cover map 						
 suit | either a RasterStack or a list of RasterStacks(for each year/epoche of sceanrio assessment) of the suitabilities for land use classes (ordered by preferences). These are usually the result of a suitability analysis. The data type should be Float (FLT4S). The names of the layers should correspond to the landuse classes, starting with "lc#", for example: "lc7", "lc4", "lc3",.. , only include suitabilities for landuses present in the initial land cover dataset and referenced in the 'demand' file. 						
 natural.lc | character string defining land cover classes referring to natural vegetation ordered by succession states. For example: c("lc1", "lc2"). There should not be specific suitability layer for these classes. If suitability layers are provided they need to be defined in the suitability stack ('suit') and refered to in the 'demand' table			
