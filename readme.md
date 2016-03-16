@@ -2,12 +2,12 @@
 
 alucR - Project is a first step to implement a Land Use Change Model in R (http://www.r-project.org). We have been following the basic framework provided by Verburg et al. (2002). Land use is spatially allocated following the suitability of a certain cell for the specific land use. The suitability might be assessed using statistical methods (for example logistic regression), machine learning algorithms (for example boosted regression trees) or other modelling techniques (for example Multi Criteria Analysis). The amount of future land use demands for the scenario assessment has to be estimated for the total study area and provided as numbers of pixels. Natural land cover and possible succession stages can be modelled based on the temporal trajectories of succession stages defined before in the trajectories matrix. The code uses basic R-language and packages. This makes it possible to easily adapt the code to the users specific needs.
 
-#Difference to alucR
+##Difference to alucR
 1. Processing RasterLayer in tiles if nessesary due to memory restriction.   
 2. The version alucR_v01 takes a modular approach following a set of function with specified in and output. This approach makes it easier to add new submodules as for example nessesary when your suitability layers depend on the last landcover distribution from your sceanrios (i.e. if spatial lags are important).
 3. The stopping criteria of the allocation routine has been changes. See description
 
-#Submodules stucture:
+##Submodules stucture
 * initializing ('alucR_0wrapper.r')
 * preprocessing ('alucR_1checkInput.r'; 'alucR_1prep_rule_mw.r'; 'alucR_1prep_varlist.r';'alucR_2prep_raster.r'; 'alucR_3prep_demand.r')
 * allocation of change ('alucR_4competitive_function_in_prep.r')
@@ -17,7 +17,7 @@ alucR - Project is a first step to implement a Land Use Change Model in R (http:
 Thes submodules are called from the wrapper function _'alucR_0wrapper.r'_ script. While all the required functions (above mentioned) need to be sourced (defined) seperately.
 
 
-##Function:
+##Function
 
 aluc(lc, suit, natural.lc=NULL, nochange.lc=NULL, spatial=NULL, demand, elas=matrix(data=0, ncol=max(lc_unique), nrow=max(lc_unique)), traj=matrix(data=1, ncol=max(lc_unique), nrow=max(lc_unique)), init.years= 5, method = "competitive", rule.mw = NULL, stop.crit=c(0.10 , 10), iter.max=100, ncores=(detectCores()-1), print.log=TRUE, print.plot=FALSE, write.raster=FALSE)
 
