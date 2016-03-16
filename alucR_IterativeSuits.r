@@ -58,8 +58,9 @@ while (epoche <= nrow(demand))
 {
   print(paste("EPOCHE:", epoche, "Date:", date(), sep = " "))
   
-  ############################################################ Add specific suitability calculation if suitability models are dependent of the former land use/cover you will need the model object and all explanatory
-  ############################################################ variables
+  ###########################################################
+  # Add specific suitability calculation if suitability models are dependent of the former land use/cover you will need the model object and all explanatory variables
+  ############################################################ 
   
   # distance to crop
   cropRater <- subs(lc, data.frame(which = 4, by = 1), by = 2, which = 1, subsWithNA = TRUE)  # in case cropland is class 4   
