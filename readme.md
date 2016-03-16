@@ -11,7 +11,7 @@ alucR - Project is a first step to implement a Land Use Change Model in R (http:
 * initializing ('alucR_0wrapper.r')
 * preprocessing ('alucR_1checkInput.r'; 'alucR_1prep_rule_mw.r'; 'alucR_1prep_varlist.r';'alucR_2prep_raster.r'; 'alucR_3prep_demand.r')
 * allocation of change ('alucR_4competitive_function_in_prep.r')
-* postprocessin ('alucR_5postprocess.r')
+* postprocessing ('alucR_5postprocess.r')
 * saving results ('alucR_0wrapper.r')
 
 Thes submodules are called from the wrapper function _'alucR_0wrapper.r'_ script. While all the required functions (above mentioned) need to be sourced (defined) seperately.
