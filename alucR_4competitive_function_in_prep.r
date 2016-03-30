@@ -14,10 +14,11 @@
 
 alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.crit, ncores = ncores, print.log = FALSE, print.plot = FALSE)
 {
+    lc_n <- var.list[[2]] [["lc_n"]] 
     lc_suit <- var.list[[4]][["lc_suit"]]
     pseudo.N <- var.list[[8]][["pseudo.N"]]
     lc.N <- var.list[[9]][["lc.N"]]
-    
+
     min.demand <- which.min(demandE)
     
     if (nlayers(suit) != length(demandE))
@@ -64,55 +65,108 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         pix_d <- t_class - demandE  # make sure they always have the same dimensions
         perc_d <- (pix_d/demandE) * 100  # 
         
+        #####new
+        linearA <- abs(1/lc_n * pix_d)/2  # how much to increase weight to add, if we asume a linear increase, to get to the required pixel numbers
+        
         if (u == 1)
         {
-            # initializing adj.p
-            adj.p <- as.vector(ifelse(sign(pix_d) != 0, -1 * sign(pix_d) * 1/100, 0), mode = "numeric")
-            
-        } else
-        {
-            # proportion <- abs(unlist(ifelse(logfile[u-1,pix_d_names]!=0,pix_d/logfile[u-1,pix_d_names], 0)))# check if that makes sense and is needed
-            proportion <- abs(1 - (unlist(ifelse(logfile[u - 1, pix_d_names] != 0, (logfile[u - 1, pix_d_names] - pix_d)/logfile[u - 1, pix_d_names], 0)))) * 
-                25/((length(lc.N))^2)
-            better <- abs(pix_d) < abs(logfile[u - 1, pix_d_names])
-            print(proportion)
-            adj.p <- as.vector(ifelse(pix_d == 0, 0, ifelse(pix_d != 0 & logfile[u - 1, adj.p_names] == 0, -1 * sign(pix_d) * 1/sample(50:150, 1), ifelse(sign(pix_d) != 
-                sign(logfile[u - 1, pix_d_names]), -1 * logfile[u - 1, adj.p_names]/((length(lc.N))^2), ifelse(better == TRUE, logfile[u - 1, adj.p_names] * proportion, 
-                logfile[u - 1, adj.p_names] * 2)))), mode = "numeric")
-            # ifelse(pix_d == 0 , print('rule1'), ifelse(pix_d != 0 & logfile[u-1, adj.p_names]== 0, print('rule2'), ifelse(sign(pix_d)!=sign(logfile[u-1, pix_d_names]),
-            # print('rule3'), ifelse (better==TRUE, print('rule4'), print('rule5')))))
-        }
+          # initializing adj.p
+          #adj.p <- as.vector(ifelse(sign(pix_d) != 0, -1 * sign(pix_d) * linearA, 0), mode = "numeric")
+          adj.p <- as.vector(ifelse(sign(pix_d) != 0, -1 * sign(pix_d) * 1/10, 0), mode = "numeric")
+        } else { 
+          
+          signchange <- (logfile[u-1, adj.p_names]/(logfile[u-1, pix_d_names] - pix_d))  * pix_d
+          
+          
+          if (any(sign(pix_d) != sign(logfile[u - 1, pix_d_names]))){
+            print(signchange)
+          } 
+          
+          better <- abs(pix_d) < abs(logfile[u - 1, pix_d_names]) 
+          
+          
+          adj.p <- as.vector(ifelse(pix_d == 0, 0,   
+                                    ifelse(pix_d < 0 & logfile[u - 1, adj.p_names] == 0, abs(adj.0* pix_d), #-1*sign(pix_d)* adj.0,
+                                           ifelse(pix_d > 0 & logfile[u - 1, adj.p_names] == 0, -1*abs(adj.0* pix_d), 
+                                                  ifelse(sign(pix_d) != sign(logfile[u - 1, pix_d_names]),  signchange/2, 
+                                                         ifelse(better == TRUE & sign(logfile[u - 1, pix_d_names])== +1 ,  -1*  (abs(logfile[u - 1, adj.p_names]) *1.4) , #abs(logfile[u - 1, adj.p_names] * proportion4),#proportion /2), 
+                                                                ifelse(better == TRUE & sign(logfile[u - 1, pix_d_names])== - 1 , logfile[u - 1, adj.p_names] *1.4 ,# abs(logfile[u - 1, adj.p_names] * proportion4),#proportion/2), 
+                                                                       ifelse (better==FALSE & sign(logfile[u - 1, pix_d_names])== +1, -1* (abs(logfile[u - 1, adj.p_names]) *2),
+                                                                               ifelse (better==FALSE & sign(logfile[u - 1, pix_d_names])== -1, abs(logfile[u - 1, adj.p_names]) *2, 
+                                                                                       0)))))))), mode = "numeric")
+          
+        }  
         
-        # define upper and lower boundraies of adjustment
-        adj.p <- ifelse(adj.p < -2, -2, ifelse(adj.p > 2, 2, adj.p))
         
-        # adjust iter
+        if (u > 1){
+          if(any(pix_d==0)){
+            if (all(logfile [u-1,pix_d_names[which(pix_d==0)]] !=0)){
+              adj.0 <- abs(logfile[u-1,adj.p_names]/logfile [u-1,pix_d_names])
+            }}}
+        
+        adj.p <- as.vector(ifelse(adj.p < -0.2, -0.2, ifelse(adj.p > 0.2, 0.2, adj.p)), mode = 'numeric' )  
+        
         iter.last <- iter
         iter <- as.numeric(iter) + as.numeric(adj.p)
+        iter <- as.vector (ifelse(iter < -2, -2, ifelse(iter > 2, 2, iter)), mode = 'numeric' )
         
-        # prevent all iter to have the same sign on from the second iteration and set the last one (lowest hierchy) to 0
-        if (all(iter != 0))
-        {
-            if (all(sign(iter) == -1) | all(sign(iter) == +1))
-            {
-                iter[-length(iter)] <- iter[-length(iter)] + (-1 * adj.p[length(adj.p[length(adj.p)])])
-                iter[length(iter)] <- 0
-            }
-        }
-        # 
-        iter <- ifelse(iter < -2, -2, ifelse(iter > 2, 2, iter))
+        logfile [u,"u" ] <- u
+        logfile [u,pix_d_names ] <- pix_d
+        logfile [u, adj.p_names] <- adj.p
+        logfile [u,iter_names ] <- iter.last
         
-        # update logfile
-        if (u == 1)
-        {
-            logfile[u, ] <- c(u, pix_d, adj.p, rep(0, times = length(lc.N)))
-        } else
-        {
-            log_tmp <- c(u, pix_d, adj.p, iter.last)
-            names(log_tmp) <- names(logfile)
-            logfile <- rbind(logfile, log_tmp)
-        }
         
+        
+        #####
+        #if (u == 1)
+        #{
+        #    # initializing adj.p
+        #    adj.p <- as.vector(ifelse(sign(pix_d) != 0, -1 * sign(pix_d) * 1/100, 0), mode = "numeric")
+        #    
+        #} else
+        #{
+        #    # proportion <- abs(unlist(ifelse(logfile[u-1,pix_d_names]!=0,pix_d/logfile[u-1,pix_d_names], 0)))# check if that makes sense and is needed
+        #    proportion <- abs(1 - (unlist(ifelse(logfile[u - 1, pix_d_names] != 0, (logfile[u - 1, pix_d_names] - pix_d)/logfile[u - 1, pix_d_names], 0)))) * 
+        #        25/((length(lc.N))^2)
+        #    better <- abs(pix_d) < abs(logfile[u - 1, pix_d_names])
+        #    print(proportion)
+        #    adj.p <- as.vector(ifelse(pix_d == 0, 0, ifelse(pix_d != 0 & logfile[u - 1, adj.p_names] == 0, -1 * sign(pix_d) * 1/sample(50:150, 1), ifelse(sign(pix_d) != 
+        #        sign(logfile[u - 1, pix_d_names]), -1 * logfile[u - 1, adj.p_names]/((length(lc.N))^2), ifelse(better == TRUE, logfile[u - 1, adj.p_names] * proportion, 
+        #        logfile[u - 1, adj.p_names] * 2)))), mode = "numeric")
+        #    # ifelse(pix_d == 0 , print('rule1'), ifelse(pix_d != 0 & logfile[u-1, adj.p_names]== 0, print('rule2'), ifelse(sign(pix_d)!=sign(logfile[u-1, pix_d_names]),
+        #    # print('rule3'), ifelse (better==TRUE, print('rule4'), print('rule5')))))
+        #}
+      #  
+      #  # define upper and lower boundraies of adjustment
+      #  adj.p <- ifelse(adj.p < -2, -2, ifelse(adj.p > 2, 2, adj.p))
+      #  
+      #  # adjust iter
+      #  iter.last <- iter
+      #  iter <- as.numeric(iter) + as.numeric(adj.p)
+      #  
+      #  # prevent all iter to have the same sign on from the second iteration and set the last one (lowest hierchy) to 0
+      #  if (all(iter != 0))
+      #  {
+    #        if (all(sign(iter) == -1) | all(sign(iter) == +1))
+     #       {
+    #            iter[-length(iter)] <- iter[-length(iter)] + (-1 * adj.p[length(adj.p[length(adj.p)])])
+    #            iter[length(iter)] <- 0
+    #        }
+    #    }
+    #    # 
+    #    iter <- ifelse(iter < -2, -2, ifelse(iter > 2, 2, iter))
+    #    
+    #    # update logfile
+    #    if (u == 1)
+    #    {
+    #        logfile[u, ] <- c(u, pix_d, adj.p, rep(0, times = length(lc.N)))
+    #    } else
+    #    {
+    #        log_tmp <- c(u, pix_d, adj.p, iter.last)
+    #        names(log_tmp) <- names(logfile)
+    #        logfile <- rbind(logfile, log_tmp)
+    #    }
+    #    
         if (print.log == TRUE)
         {
             print(logfile[u, ])

@@ -93,32 +93,34 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
         # Run submodules
         if (epoche == 1)
         {
-            alucR_check_input(lc, suit = p_raster, spatial, init.years, demand, nochange.lc, natural.lc)
+            alucR_check_input(lc, suit = p_raster, spatial=spatially, init.years=init.hist, demand, nochange.lc, natural.lc)
             var.list <- alucR_prep1(lc, suit = p_raster, nochange.lc, natural.lc)
         }
         
-        suit.prep <- alucR_prep2(lc, suit = p_raster, spatial, init.years, var.list, epoche = epoche, elas, traj)
+        suit.prep <- alucR_prep2(lc, suit = p_raster, spatial=spatially, init.years=init.hist, var.list, epoche = epoche, elas, traj)
         
-        demand.prep <- alucR_demand.prep(demand, lc, spatial, varl.list, epoche)
+        demand.prep <- alucR_demand.prep(demand, lc, spatial=spatially, varl.list, epoche)
         
         if (method == "competitive")
         {
-            sceanrioaloc <- alucR_competitive(suit = suit.prep, demandE = demand.prep[[1]], demandC = demand.prep[[2]], var.list, max.iter, stop.crit, ncores = ncores, 
+            scenarioaloc <- alucR_competitive(suit = suit.prep, demandE = demand.prep[[1]], demandC = demand.prep[[2]], var.list, max.iter, stop.crit, ncores = ncores, 
                 print.log = TRUE, print.plot = TRUE)
         }
-        sceanrioL <- alucR_postprocess(alloc = sceanrioaloc[[1]], lc, spatial, var.list, traj, init.years)
+        scenarioL <- alucR_postprocess(alloc = sceanrioaloc[[1]], lc, spatial=spatially, var.list, traj, init.years=init.hist)
         
         # extract results from submodules and save them
         if (epoche == 1)
         {
-            alucLog <- data.frame(epoche = epoche, sceanrioaloc[[2]])
+            alucLog <- data.frame(epoche = epoche, scenarioaloc[[2]])
             
         } else
         {
-            alucLog <- rbind(alucLog, data.frame(epoche = epoche, sceanrioaloc[[2]]))
+            alucLog <- rbind(alucLog, data.frame(epoche = epoche, scenarioaloc[[2]]))
         }
         
-        lc <- subset(sceanrioL, subset = 1)
+        lc <- subset(scenarioL, subset = 1)
+        init.hist <- subset(scenarioL, subset=2)
+        
         assign(paste("scenario", epoche, sep = ""), lc)
         if (write.raster == TRUE)
         {
@@ -135,8 +137,8 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
         }
         rm(suit.prep)
         rm(demand.prep)
-        rm(sceanrioaloc)
-        rm(sceanrioL)
+        rm(scenarioaloc)
+        rm(scenarioL)
     }  # end of epoche loop 
     
     out <- list(stack(mget(paste("scenario", rep(1:nrow(demand)), sep = ""))), alucLog)
