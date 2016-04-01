@@ -56,7 +56,8 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
     
     while (epoche <= nrow(demand))
     {
-        print(paste("EPOCHE:", epoche, "Date:", date(), sep = " "))
+      cat("\n", "Epoche", epoche, "start. Date:", date())  
+      #print(paste("EPOCHE:", epoche, "Date:", date(), sep = " "))
         
         
         # Suitability maps Reads the provided suitability maps. Suitabilities may be added as a RasteStacks with each layer refering to one of the modeled land use
@@ -95,18 +96,19 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
         {
             alucR_check_input(lc, suit = p_raster, spatial=spatially, init.years=init.hist, demand, nochange.lc, natural.lc)
             var.list <- alucR_prep1(lc, suit = p_raster, nochange.lc, natural.lc)
+           #cat("\n","var.list")
         }
         
         suit.prep <- alucR_prep2(lc, suit = p_raster, spatial=spatially, init.years=init.hist, var.list, epoche = epoche, elas, traj)
         
-        demand.prep <- alucR_demand.prep(demand, lc, spatial=spatially, varl.list, epoche)
+        demand.prep <- alucR_demand.prep(lc , demand, spatial=spatially, var.list , epoche)
         
         if (method == "competitive")
         {
             scenarioaloc <- alucR_competitive(suit = suit.prep, demandE = demand.prep[[1]], demandC = demand.prep[[2]], var.list, max.iter, stop.crit, ncores = ncores, 
                 print.log = TRUE, print.plot = TRUE)
         }
-        scenarioL <- alucR_postprocess(alloc = sceanrioaloc[[1]], lc, spatial=spatially, var.list, traj, init.years=init.hist)
+        scenarioL <- alucR_postprocess(alloc = scenarioaloc[[1]], lc, spatial=spatially, var.list, traj, init.years=init.hist)
         
         # extract results from submodules and save them
         if (epoche == 1)
@@ -127,7 +129,8 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
             writeRaster(lc, filename = paste("scenario", epoche, sep = ""))
         }
         
-        print(paste("EPOCHE", epoche, "DONE: Date:", date(), sep = " "))
+        cat("\n", "Epoche", epoche, "done. Date:", date())
+        #print(paste("EPOCHE", epoche, "DONE: Date:", date(), sep = " "))
         
         # initialize new epoche
         epoche <- epoche + 1

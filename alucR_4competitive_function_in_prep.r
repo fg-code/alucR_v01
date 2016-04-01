@@ -23,7 +23,8 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
     
     if (nlayers(suit) != length(demandE))
     {
-        print("Warning: layers of suit != length of demand")
+       cat("\n", "Warning: layers of suit != length of demand") 
+      #print("Warning: layers of suit != length of demand")
     }
     
     logfile <- data.frame(matrix(data = NA, ncol = (1 + length(lc.N) + length(lc.N) + length(lc.N)), nrow = 1))
@@ -78,9 +79,9 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
           signchange <- (logfile[u-1, adj.p_names]/(logfile[u-1, pix_d_names] - pix_d))  * pix_d
           
           
-          if (any(sign(pix_d) != sign(logfile[u - 1, pix_d_names]))){
-            print(signchange)
-          } 
+          #if (any(sign(pix_d) != sign(logfile[u - 1, pix_d_names]))){
+          #  print(signchange)
+          #} 
           
           better <- abs(pix_d) < abs(logfile[u - 1, pix_d_names]) 
           
@@ -114,62 +115,12 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         logfile [u,pix_d_names ] <- pix_d
         logfile [u, adj.p_names] <- adj.p
         logfile [u,iter_names ] <- iter.last
-        
-        
-        
-        #####
-        #if (u == 1)
-        #{
-        #    # initializing adj.p
-        #    adj.p <- as.vector(ifelse(sign(pix_d) != 0, -1 * sign(pix_d) * 1/100, 0), mode = "numeric")
-        #    
-        #} else
-        #{
-        #    # proportion <- abs(unlist(ifelse(logfile[u-1,pix_d_names]!=0,pix_d/logfile[u-1,pix_d_names], 0)))# check if that makes sense and is needed
-        #    proportion <- abs(1 - (unlist(ifelse(logfile[u - 1, pix_d_names] != 0, (logfile[u - 1, pix_d_names] - pix_d)/logfile[u - 1, pix_d_names], 0)))) * 
-        #        25/((length(lc.N))^2)
-        #    better <- abs(pix_d) < abs(logfile[u - 1, pix_d_names])
-        #    print(proportion)
-        #    adj.p <- as.vector(ifelse(pix_d == 0, 0, ifelse(pix_d != 0 & logfile[u - 1, adj.p_names] == 0, -1 * sign(pix_d) * 1/sample(50:150, 1), ifelse(sign(pix_d) != 
-        #        sign(logfile[u - 1, pix_d_names]), -1 * logfile[u - 1, adj.p_names]/((length(lc.N))^2), ifelse(better == TRUE, logfile[u - 1, adj.p_names] * proportion, 
-        #        logfile[u - 1, adj.p_names] * 2)))), mode = "numeric")
-        #    # ifelse(pix_d == 0 , print('rule1'), ifelse(pix_d != 0 & logfile[u-1, adj.p_names]== 0, print('rule2'), ifelse(sign(pix_d)!=sign(logfile[u-1, pix_d_names]),
-        #    # print('rule3'), ifelse (better==TRUE, print('rule4'), print('rule5')))))
-        #}
-      #  
-      #  # define upper and lower boundraies of adjustment
-      #  adj.p <- ifelse(adj.p < -2, -2, ifelse(adj.p > 2, 2, adj.p))
-      #  
-      #  # adjust iter
-      #  iter.last <- iter
-      #  iter <- as.numeric(iter) + as.numeric(adj.p)
-      #  
-      #  # prevent all iter to have the same sign on from the second iteration and set the last one (lowest hierchy) to 0
-      #  if (all(iter != 0))
-      #  {
-    #        if (all(sign(iter) == -1) | all(sign(iter) == +1))
-     #       {
-    #            iter[-length(iter)] <- iter[-length(iter)] + (-1 * adj.p[length(adj.p[length(adj.p)])])
-    #            iter[length(iter)] <- 0
-    #        }
-    #    }
-    #    # 
-    #    iter <- ifelse(iter < -2, -2, ifelse(iter > 2, 2, iter))
-    #    
-    #    # update logfile
-    #    if (u == 1)
-    #    {
-    #        logfile[u, ] <- c(u, pix_d, adj.p, rep(0, times = length(lc.N)))
-    #    } else
-    #    {
-    #        log_tmp <- c(u, pix_d, adj.p, iter.last)
-    #        names(log_tmp) <- names(logfile)
-    #        logfile <- rbind(logfile, log_tmp)
-    #    }
-    #    
+ 
         if (print.log == TRUE)
         {
-            print(logfile[u, ])
+          #if(u==1){cat("\n", names(logfile))}
+          cat("\n")
+          print(logfile[u, ])
         }
         
         if (print.plot == TRUE)
@@ -189,7 +140,8 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         {
             if (print.log == TRUE)
             {
-                print("Stop criterium: percent of change")
+               cat ("\n","Stop criterium: percent of change" ) 
+              #print("Stop criterium: percent of change")
             }
             beginCluster(n = ncores)
             aloc <- clusterR(t_aloc, reclassify, args = list(rcl = matrix(c(1:nlayers(p_suit), lc.N), ncol = 2)))
@@ -201,7 +153,8 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         {
             if (print.log == TRUE)
             {
-                print("Stop criterium: number of Pixel")
+              cat ("\n","Stop criterium: number of Pixel" )   
+              #print("Stop criterium: number of Pixel")
             }
             beginCluster(n = ncores)
             aloc <- clusterR(t_aloc, reclassify, args = list(rcl = matrix(c(1:nlayers(p_suit), lc.N), ncol = 2)))
@@ -214,7 +167,8 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         {
             if (print.log == TRUE)
             {
-                print("Stop criterium: number of max. iterations reached")
+              cat ("\n","Stop criterium: number of max. iterations reached" )    
+              #print("Stop criterium: number of max. iterations reached")
             }
             # which iteration had the smallest overall pixel difference
             ind <- which.min(rowSums(abs(logfile[, "pix_d"])))

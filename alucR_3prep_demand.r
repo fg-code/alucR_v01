@@ -8,7 +8,7 @@
 # OUT: list, combining the [[1]] adjusted demand, including natural land cover and reduced for the spatial restrictions [[2]] change of demand from one epoche
 # to the next
 
-alucR_demand.prep <- function(demand, lc, spatial, varl.list, epoche)
+alucR_demand.prep <- function(lc ,demand, spatial, var.list, epoche)
 {
     
     # extract variables from var.list
@@ -29,7 +29,7 @@ alucR_demand.prep <- function(demand, lc, spatial, varl.list, epoche)
     indSort <- match(as.character(demandNames), as.character(names(demand)))
     if (all(is.na(indSort)))
     {
-        print("Names of 'demand' and names from 'suitability stack' do not match: both should start with lc followed by the class number ")
+        cat("\n","Names of 'demand' and names from 'suitability stack' do not match: both should start with lc followed by the class number")
     }
     demandE <- demand[epoche, indSort]  # sortet according to lc_suit RasterLayer
     
@@ -54,11 +54,12 @@ alucR_demand.prep <- function(demand, lc, spatial, varl.list, epoche)
         {
             natural.d <- lc_n - sum(demandE)
         }
-        print(paste("Area for natural land cover:", natural.d))
+        cat("\n","Area for natural land cover:", natural.d)
         if (sign(natural.d) == -1)
         {
             natural.d <- 0
-            print("Warning: the demand cannot be allocated due to spatial (no change classes). Natural vegetation as defined is set to 0")
+            cat("\n", "Warning: the demand cannot be allocated due to spatial (no change classes). Natural vegetation as defined is set to 0")
+            #print("Warning: the demand cannot be allocated due to spatial (no change classes). Natural vegetation as defined is set to 0")
         }
     }
     
@@ -81,7 +82,8 @@ alucR_demand.prep <- function(demand, lc, spatial, varl.list, epoche)
         {
             indSpatial <- match(natural, lc_spatial.tab[, "value"])
             natural.d <- natural.d - sum(lc_spatial.tab[indSpatial, "count"], na.rm = TRUE)
-            print(paste("Area for natural vegetation outside protected areas:", natural.d, sep = ""))
+            cat("\n","Area for natural vegetation outside protected areas:", natural.d)
+            #print(paste("Area for natural vegetation outside protected areas:", natural.d, sep = ""))
         }
     }
     # combining demand for land use classes and natural land cover

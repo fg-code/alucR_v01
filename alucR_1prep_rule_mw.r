@@ -34,7 +34,8 @@ alucR_rule.mw <- function(lc, suit, rule.mw)
             rm(focalW)
         } else
         {
-            print(paste("rule.mw was not applied:", as.character(rule.mw[f, 1]), "is not an element of the suitability rasters names:", suitNames, sep = ""))
+          cat("\n", "rule.mw was not applied:", as.character(rule.mw[f, 1]), "is not an element of the suitability rasters names:", suitNames)  
+          #print(paste("rule.mw was not applied:", as.character(rule.mw[f, 1]), "is not an element of the suitability rasters names:", suitNames, sep = ""))
         }
     }
     return(p_raster)
