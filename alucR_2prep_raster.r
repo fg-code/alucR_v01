@@ -369,6 +369,13 @@ alucR_prep2 <- function(lc, suit, spatial, init.years, var.list, epoche = epoche
         out <- setValues(out, vv)
     }
     pbClose(pb)
+    if (length(natural) > 0)
+    {
+      names(out) <- c(names(suit),"lcN")
+    }else
+    {
+      names(out) <- names(suit)
+    }
     # return raster
     return(out)
 } 
