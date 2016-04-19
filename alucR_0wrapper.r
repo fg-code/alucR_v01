@@ -89,7 +89,9 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
                   assign("spatially", spatial)
                 }
             }
-        }
+        } else {
+		spatially <- NULL
+		}
         
         # Run submodules
         if (epoche == 1)
