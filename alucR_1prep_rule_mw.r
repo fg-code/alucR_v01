@@ -12,7 +12,7 @@ alucR_rule.mw <- function(lc, suit, rule.mw)
     {
         # moving window rule.
         
-        suitNames <- names(p_raster)
+        suitNames <- names(suit)
         if (is.element(as.character(rule.mw[f, 1]), suitNames))
         {
             mat <- focalWeight(lc, rule.mw[f, 2], "circle")  # lc class and radius of moving window
@@ -21,13 +21,13 @@ alucR_rule.mw <- function(lc, suit, rule.mw)
             rclM[which(rclM[, 1] == as.numeric(gsub("lc", "", rule.mw[f, 1]))), 2] <- 1  # binary classification for the class of interest
             focalC <- reclassify(focalC, rcl = rclM)
             focalW <- focal(x = focalC, w = mat, fun = sum, na.rm = TRUE)
-            suitMW <- subset(p_raster, as.character(rule.mw[f, 1]))
+            suitMW <- subset(suit, as.character(rule.mw[f, 1]))
             suitMWf <- suitMW * focalW
             suitMWf[Which(suitMWf) == 0] <- NA
             names(suitMWf) <- as.character(rule.mw[f, 1])
-            p_raster <- dropLayer(p_raster, which(names(p_raster) == rule.mw[f, 1]))
-            p_raster <- addLayer(p_raster, suitMWf)
-            p_raster <- subset(p_raster, subset = match(suitNames, names(p_raster)))  # order to original order
+            suit <- dropLayer(suit, which(names(suit) == rule.mw[f, 1]))
+            suit <- addLayer(suit, suitMWf)
+            suit <- subset(suit, subset = match(suitNames, names(suit)))  # order to original order
             rm(suitMW)
             rm(suitMWf)
             rm(focalC)
@@ -38,7 +38,7 @@ alucR_rule.mw <- function(lc, suit, rule.mw)
           #print(paste("rule.mw was not applied:", as.character(rule.mw[f, 1]), "is not an element of the suitability rasters names:", suitNames, sep = ""))
         }
     }
-    return(p_raster)
+    return(suit)
 } 
 
 
