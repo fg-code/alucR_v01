@@ -58,7 +58,10 @@ alucR_postprocess <- function(alloc = allocation[[1]], lc, spatial, var.list, tr
             if (length(spatial) > 0)
             {
                 v.spatial <- getValues(spatial, row = bs$row[i], nrows = bs$nrows[i])
-            }
+            } else{
+			 v.spatial <- NULL
+			}
+			
             
             # process no.change
             if (length(nochange) > 0)
