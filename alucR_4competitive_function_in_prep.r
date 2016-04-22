@@ -171,7 +171,7 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, iter.max, stop.c
               #print("Stop criterium: number of max. iterations reached")
             }
             # which iteration had the smallest overall pixel difference
-            ind <- which.min(rowSums(abs(logfile[, "pix_d"])))
+            ind <- which.min(rowSums(abs(logfile[, pix_d_names])))
             iterfinal <- logfile[ind, iter_names]
             
             p_suit <- p_suit + as.numeric(iterfinal)
