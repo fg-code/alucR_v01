@@ -1,7 +1,7 @@
 # Date: 15.03.2016 florian.gollnow@geo.hu-berlin.de
 
 
-# suit | preprocessed suitabilities demandE | vector of demand for the relevant epoche demandC | vector of demand change from one epoche to the next max.iter
+# suit | preprocessed suitabilities demandE | vector of demand for the relevant epoche demandC | vector of demand change from one epoche to the next iter.max
 # | maximum iterations before best allocation from the temporary allocation is chosen (in case stop.cript was not meet) stop.crit | stoping criteria defined
 # as a vector with two values: first one refers to max percent difference from change between two epoches, second to the maximum pixel difference allowed. If
 # any is reached the allocation stops print.log | print.plot |
@@ -12,7 +12,7 @@
 # require(raster) install.packages('snow') library(snow)
 
 
-alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.crit, ncores = ncores, print.log = FALSE, print.plot = FALSE)
+alucR_competitive <- function(suit, demandE, demandC, var.list, iter.max, stop.crit, ncores = ncores, print.log = FALSE, print.plot = FALSE)
 {
     lc_n <- var.list[[2]] [["lc_n"]] 
     lc_suit <- var.list[[4]][["lc_suit"]]
@@ -125,7 +125,7 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         
         if (print.plot == TRUE)
         {
-            plot(0, 0, xlim = c(2, max.iter), ylim = c(-1, 1), ylab = "iter", xlab = "iteration", type = "n")
+            plot(0, 0, xlim = c(2, iter.max), ylim = c(-1, 1), ylab = "iter", xlab = "iteration", type = "n")
             grid()
             names.legend <- paste("LC", c(lc.N))
             legend("topright", legend = names.legend, col = rainbow(lc.N), pch = 15)
@@ -163,7 +163,7 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, max.iter, stop.c
         }
         
         # stop argument iteration if ITERmax reached and take the ITER with the minimum deviation from the demand from all iterations
-        if (u == max.iter)
+        if (u == iter.max)
         {
             if (print.log == TRUE)
             {
