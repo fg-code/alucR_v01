@@ -180,7 +180,7 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, iter.max, stop.c
             aloc <- clusterR(t_aloc, reclassify, args = list(rcl = matrix(c(1:nlayers(p_suit), lc.N), ncol = 2)))  # only the final map...
             endCluster()
             # update logfile
-            log_tmp <- c(u, logfile[ind, pix_d_names], logfile[ind, adj.p_names], iterfinal)
+            log_tmp <- data.frame(u, logfile[ind, pix_d_names], logfile[ind, adj.p_names], iterfinal)
             logfile <- rbind(logfile, log_tmp)
             
             break
