@@ -107,7 +107,7 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
         
         if (method == "competitive")
         {
-            scenarioaloc <- alucR_competitive(suit = suit.prep, demandE = demand.prep[[1]], demandC = demand.prep[[2]], var.list, max.iter, stop.crit, ncores = ncores, 
+            scenarioaloc <- alucR_competitive(suit = suit.prep, demandE = demand.prep[[1]], demandC = demand.prep[[2]], var.list, iter.max, stop.crit, ncores = ncores, 
                 print.log = TRUE, print.plot = TRUE)
         }
         scenarioL <- alucR_postprocess(alloc = scenarioaloc[[1]], lc, spatial=spatially, var.list, traj, init.years=init.hist)
