@@ -35,7 +35,7 @@ alucR_check_input <- function(lc, suit, spatial, init.years, demand, nochange.lc
         if (test == FALSE)
         {
           cat("\n", "Warninglc and spatial do not have the same projection, extend, or dimension. Consider to use 'resample' in the raster package, method='ngb' to aligne")  
-          #print("Warninglc and spatial do not have the same projection, extend, or dimension. Consider to use 'resample' in the raster package, method='ngb' to aligne")
+          #print("Warning lc and spatial do not have the same projection, extend, or dimension. Consider to use 'resample' in the raster package, method='ngb' to aligne")
         }
     }
     if (class(init.years) == "RasterLayer")
