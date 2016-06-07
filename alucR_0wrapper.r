@@ -128,7 +128,7 @@ aluc <- function(lc, suit, natural.lc = NULL, nochange.lc = NULL, spatial = NULL
         assign(paste("scenario", epoche, sep = ""), lc)
         if (write.raster == TRUE)
         {
-            writeRaster(lc, filename = paste("scenario", epoche, sep = ""))
+            writeRaster(lc, filename = paste("scenario", epoche,".tif", sep = ""))
         }
         
         cat("\n", "Epoche", epoche, "done. Date:", date())
