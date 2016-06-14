@@ -7,7 +7,7 @@ The demand of future land use will be spatially allocated according to the highe
 The suitability layers might be assessed using statistical methods (for example logistic regression), machine learning algorithms (for example boosted regression trees) or other modelling techniques (for example Multi Criteria Analysis).  
 Natural land cover is generally defined to be equally probable for any location. Possible succession stages may be modelled based on the temporal trajectories of succession stages defined in the trajectories matrix. The code uses basic R-language and packages. This makes it possible to easily adapt the code to the user's specific needs.   
 
-Poster with an example application can be found here: [dx.doi.org/10.13140/RG.2.1.3711.9600](https://www.researchgate.net/publication/303924561_An_Open_and_Flexible_Land_Use_Model_for_Scenario_Assessments_alucR_Allocation_of_Land_UseCover_in_R?channel=doi&linkId=575ea5e608aec91374b3e778&showFulltext=true)    
+A poster with an example application can be found here: [dx.doi.org/10.13140/RG.2.1.3711.9600](https://www.researchgate.net/publication/303924561_An_Open_and_Flexible_Land_Use_Model_for_Scenario_Assessments_alucR_Allocation_of_Land_UseCover_in_R?channel=doi&linkId=575ea5e608aec91374b3e778&showFulltext=true)    
 The example dataset and code will be available soon.
 
 
