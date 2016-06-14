@@ -11,7 +11,7 @@ A poster with an example application can be found here: [dx.doi.org/10.13140/RG.
 The example dataset and code will be available soon.
 
 
-##Difference to alucR
+##Difference to previous version of alucR
 1. Processing RasterLayer in tiles if nessesary due to memory restriction.   
 2. The version alucR_v01 takes a modular approach following a set of function with specified in and output. This approach makes it easier to add new submodules as for example nessesary when your suitability layers depend on the last landcover distribution from your sceanrios (i.e. if spatial lags are important).
 3. The stopping criteria of the allocation routine has been changes. See description
