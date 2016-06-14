@@ -8,7 +8,7 @@
 # OUT: list, combining the [[1]] adjusted demand, including natural land cover and reduced for the spatial restrictions [[2]] change of demand from one epoche
 # to the next
 
-alucR_demand.prep <- function(lc ,demand, spatial, var.list, epoche)
+alucR_demand.prep <- function(lc ,demand, spatial, var.list, epoche, print.log=TRUE)
 {
     
     # extract variables from var.list
@@ -94,6 +94,11 @@ alucR_demand.prep <- function(lc ,demand, spatial, var.list, epoche)
     } else
     {
         demandE_N <- demandE
+    }
+    
+    if (print.log == TRUE)
+    {
+      cat ("\n","Demand changed from before:" ,  unlist(demandchange)) 
     }
     
     out <- list(demandE_N, demandchange)
