@@ -6,7 +6,7 @@ The demand of future land use will be spatially allocated according to the highe
 
 The suitability layers might be assessed using statistical methods (for example logistic regression), machine learning algorithms (for example boosted regression trees) or other modelling techniques (for example Multi Criteria Analysis). The amount of future land use demands for the scenario assessment has to be estimated for the total study area and provided as numbers of pixels. Natural land cover and possible succession stages can be modelled based on the temporal trajectories of succession stages defined before in the trajectories matrix. The code uses basic R-language and packages. This makes it possible to easily adapt the code to the user's specific needs.   
 
-Poster with an example application can be found here: dx.doi.org/10.13140/RG.2.1.3711.9600    
+Poster with an example application can be found here: [dx.doi.org/10.13140/RG.2.1.3711.9600](dx.doi.org/10.13140/RG.2.1.3711.9600)    
 The example dataset and code will be available soon.
 
 
