@@ -23,7 +23,9 @@ The example dataset and code will be available soon.
 * postprocessing ('alucR_5postprocess.r')
 * saving results ('alucR_0wrapper.r')
 
-Thes submodules are called from the wrapper function _'alucR_0wrapper.r'_ script. While all the required functions (above mentioned) need to be sourced (defined) seperately. 
+Thes submodules are called from the wrapper function _'alucR_0wrapper.r'_ script. While all the required functions (above mentioned) need to be sourced (defined) seperately.   
+
+To initialize the function: store all files in a folder and run the _'sourceFunction.r'_ Script, to source all nessesary scripts.
 
 
 ##Function
