@@ -128,7 +128,7 @@ alucR_competitive <- function(suit, demandE, demandC, var.list, iter.max, stop.c
             plot(0, 0, xlim = c(2, iter.max), ylim = c(-1, 1), ylab = "iter", xlab = "iteration", type = "n")
             grid()
             names.legend <- paste("LC", c(lc.N))
-            legend("topright", legend = names.legend, col = rainbow(lc.N), pch = 15)
+            legend("topright", legend = names.legend, col = rainbow(length(lc.N)), pch = 15)
             for (i in 1:length(lc.N))
             {
                 lines(c(1:nrow(logfile)), logfile[, iter_names[i]], col = rainbow(lc.N)[i], type = "l", lwd = 2)
